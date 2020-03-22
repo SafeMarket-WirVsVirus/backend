@@ -1,13 +1,20 @@
-Swagger UI
-/swagger/ui/index.html
+# Readme
+
+Dieses Projekt ist das Backend zu [SafeMarket](https://devpost.com/software/17_supermarkt_status_reservation_system).
 
 
-OAS3 API Specification
-/api-docs/v1/oas3.json
+## Api dokumentation
+
+`http://localhost:5000/swagger/ui`
 
 
+## Abhängigkeiten
 
+- Webserver
+- MySQL Datenbank
 
-// f�r eine neue Migration
-Add-Migration
-Update-Database
+Um das Projekt lauiffähig zu bekommen müssen 2 folgende Daten hinterlegt werden:
+
+`~/MySqlConnect/DataReservationContext.cs` - ConnectionString zur Datenbank
+`~/WebApi/Services/PlacesDetailService.cs` - GooglePlaces ApiKey
+

@@ -51,7 +51,18 @@
             <param name="credentials">credentials</param>
             <returns></returns>
         </member>
-        <member name="M:ReservationSystem.Controllers.ReservationController.ReservationsByDevice(System.String)">
+        <member name="M:ReservationSystem.Controllers.LocationController.Create(ReservationSystem.Contracts.LocationModel)">
+            <summary>
+                Creates a new location including 
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <remarks>
+                LocationOpeningModel needs a correct english name of a weekday to work properly.
+                Those values are 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday','Saturday', 'Sunday'
+            </remarks>
+        </member>
+        <member name="M:ReservationSystem.Controllers.ReservationController.ReservationsByDevice(System.String,System.DateTime)">
             <summary>
             Gets all reservations created by a specific device
             </summary>

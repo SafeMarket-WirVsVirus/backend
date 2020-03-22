@@ -15,7 +15,6 @@ namespace ReservationSystem.Contracts {
     public int Capacity { get; set; }
     public int SlotSize { get; set; }
     public int SlotDuration { get; set; }
-    public ShopType ShopType { get; set; }
     public int UserId { get; set; }
     public string PlacesId { get; set; }
 

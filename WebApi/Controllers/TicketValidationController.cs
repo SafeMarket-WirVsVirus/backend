@@ -12,13 +12,13 @@ namespace ReservationSystem.Controllers
     public class TicketValidationController : ControllerBase
     {
         [HttpGet("VerifyTicket")]
-        public async Task<IActionResult> Task(string ticketId)
+        public async Task<IActionResult> Task(string ticketId, int locationId)
         {
             using (var context = new ReservationContext())
             {
                 var reservation = await context.Reservation
                     .Include(x => x.Location)
-                    .FirstOrDefaultAsync(x => x.ReservationToken == ticketId);
+                    .FirstOrDefaultAsync(x => x.ReservationToken == ticketId && x.LocationId == locationId);
 
                 if (reservation == null)
                 {

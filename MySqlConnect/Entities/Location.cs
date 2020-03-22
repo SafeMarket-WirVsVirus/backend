@@ -20,8 +20,6 @@ namespace MySqlConnect.Entities {
     public int SlotSize { get; set; }
     public int SlotDuration { get; set; }
 
-    public ShopType ShopType { get; set; }
-
     [ForeignKey(nameof(User))]
     public int UserId { get; set; }
 

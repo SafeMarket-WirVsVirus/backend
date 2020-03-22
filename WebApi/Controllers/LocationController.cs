@@ -26,6 +26,15 @@ namespace ReservationSystem.Controllers
             _placesDetail = placesDetail;
         }
 
+        /// <summary>
+        ///     Creates a new location including 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// <remarks>
+        ///     LocationOpeningModel needs a correct english name of a weekday to work properly.
+        ///     Those values are 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday','Saturday', 'Sunday'
+        /// </remarks>
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] LocationModel model)
         {
@@ -44,7 +53,6 @@ namespace ReservationSystem.Controllers
                     Capacity = model.Capacity,
                     SlotSize = model.SlotSize,
                     SlotDuration = model.SlotDuration,
-                    ShopType = model.ShopType,
                     User = user,
                     PlacesId = model.PlacesId
                 };
@@ -118,18 +126,18 @@ namespace ReservationSystem.Controllers
         }
 
         [HttpGet("Search")]
-        public async Task<IEnumerable<PlacesTextsearchResponse>> SearchLocations(
+        public async Task<SearchLocationResult> SearchLocations(
             [FromQuery] string type,
             [FromQuery] double longitude,
             [FromQuery] double latitude,
             [FromQuery] int radiusInMeters)
         {
             var locations = await _placesSearch.GetFor(type, longitude, latitude, radiusInMeters);
-            return locations;
+            return new SearchLocationResult { Locations = locations };
         }
 
         [HttpGet("SearchRegistered")]
-        public async Task<IEnumerable<LocationResult>> SearchRegisteredLocations(
+        public async Task<SearchRegisteredLocationResult> SearchRegisteredLocations(
             [FromQuery] string type,
             [FromQuery] double longitude,
             [FromQuery] double latitude,
@@ -161,7 +169,7 @@ namespace ReservationSystem.Controllers
                     response.Add(registeredLocation);
                 }
 
-                return response;
+                return new SearchRegisteredLocationResult { Locations = response};
             }
         }
 
@@ -185,6 +193,52 @@ namespace ReservationSystem.Controllers
             }
         }
 
+        [HttpGet("GetReservationPerSlot")]
+        public async Task<IActionResult> GetSlots(int locationId, DateTime startTime, int slotSizeInMinutes) {
+            using (var context = new ReservationContext()) {
+
+                if (await context.Location.AnyAsync(x=>x.Id == locationId) == false) {
+                    return BadRequest("Location id not existing.");
+                }
+
+                if (slotSizeInMinutes <1) {
+                    return BadRequest("Slot size must be a positive number.");
+                }
+
+                var result = new SlotResult();
+                var dayOfWeek = startTime.DayOfWeek.ToString();
+                var opening = await context.LocationOpening.FirstOrDefaultAsync(x => x.LocationId == locationId &&
+                                                                             x.OpeningDays == dayOfWeek);
+                DateTime endTime;
+
+                if (opening == null) {
+                    endTime = new DateTime(startTime.Year, startTime.Month, startTime.Day,23,59,59);
+                } else {
+                    endTime = new DateTime(startTime.Year, startTime.Month, startTime.Day,opening.ClosingTime.Hour,opening.ClosingTime.Minute,opening.ClosingTime.Second);
+                }
+                
+                
+                var current = startTime;
+                do {
+                    var currentEnd = current.AddMinutes(slotSizeInMinutes);
+
+                    var count = await context.Reservation.CountAsync(x => x.LocationId == locationId
+                                                                       && x.StartTime >= current
+                                                                       && x.StartTime < currentEnd);
+
+                    result.Items.Add(new SlotItem() {
+                        Start = current,
+                        End = currentEnd,
+                        RegistrationCount = count
+                    });
+                    
+                    current = current.AddMinutes(slotSizeInMinutes);
+                } while (current < endTime);
+
+                return Ok(result);
+            }
+        }
+
         [HttpPut("{locationId}")]
         public async Task<LocationModel> Update(int locationId, [FromBody] LocationModel model)
         {
@@ -202,9 +256,17 @@ namespace ReservationSystem.Controllers
                 location.Capacity = model.Capacity;
                 location.SlotSize = model.SlotSize;
                 location.SlotDuration = model.SlotDuration;
-                location.ShopType = model.ShopType;
                 location.PlacesId = model.PlacesId;
-                // todo openings and owner
+                
+                location.LocationOpenings.Clear();
+                
+                foreach (LocationOpeningModel locModel in model.LocationOpening) {
+                    location.LocationOpenings.Add(new LocationOpening() {
+                        OpeningDays = locModel.DayOfWeek,
+                        OpeningTime = locModel.OpeningHours,
+                        ClosingTime = locModel.ClosingHours
+                    });
+                }
 
                 await context.SaveChangesAsync();
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -81,42 +81,20 @@ namespace ReservationSystem.Controllers {
       return numberOfReservations < location.SlotSize;
     }
 
-    [HttpGet("ReservationByDevice")]
-    public async Task<GetReservationsResult> GetReservations(int locationId, string deviceId) {
-      using (var context = new ReservationContext()) {
-        var location = await context.Location.Include(x => x.Reservations)
-                                    .FirstOrDefaultAsync(x => x.Id == locationId);
-
-        if (location == null) {
-          NotFound(nameof(locationId));
-          return null;
-        }
-
-        Ok();
-        return new GetReservationsResult {
-          Reservations = location.Reservations
-                                 .Where(x => x.DeviceId == deviceId)
-                                 .Select(x => new ReservationContract(x))
-                                 .ToList()
-        };
-      }
-    }
-
-
     /// <summary>
     /// Gets all reservations created by a specific device
     /// </summary>
     /// <param name="deviceId">device id</param>
     /// <returns>all reservations</returns>
     [HttpGet("ReservationsByDevice")]
-    public async Task<IActionResult> ReservationsByDevice(string deviceId) // ToDo Index auf DeviceId
+    public async Task<IActionResult> ReservationsByDevice(string deviceId, DateTime minDate) // ToDo Index auf DeviceId
     {
         using (var context = new ReservationContext())
         {
             return Ok(
                 new GetReservationsResult()
                 {
-                    Reservations = context.Reservation.Where(x => x.DeviceId == deviceId)
+                    Reservations = context.Reservation.Where(x => x.DeviceId == deviceId && x.StartTime >= minDate)
                         .Select(x => new ReservationContract(x))
                         .ToList()
                 }
