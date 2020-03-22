@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ReservationSystem</name>
+    </assembly>
+    <members>
+        <member name="T:ReservationSystem.Contracts.LoginResponse">
+            <summary>
+            The Login Response
+            </summary>
+        </member>
+        <member name="P:ReservationSystem.Contracts.LoginResponse.JWTWebToken">
+            <summary>
+            JWT Bearer Token which is valid for one hour
+            </summary>
+        </member>
+        <member name="T:ReservationSystem.Contracts.TicketValidationResult">
+            <summary>
+            Returns the result of a ticket validation
+            </summary>
+        </member>
+        <member name="P:ReservationSystem.Contracts.TicketValidationResult.ValidationResult">
+            <summary>
+            true wheter the ticket is valid
+            </summary>
+        </member>
+        <member name="T:ReservationSystem.Contracts.UserCredentials">
+            <summary>
+            The User credentials
+            </summary>
+        </member>
+        <member name="P:ReservationSystem.Contracts.UserCredentials.Email">
+            <summary>
+            Email of the user
+            </summary>
+        </member>
+        <member name="P:ReservationSystem.Contracts.UserCredentials.Password">
+            <summary>
+            Password
+            </summary>
+        </member>
+        <member name="T:ReservationSystem.Controllers.AuthenticationController">
+            <summary>
+                Authentication
+            </summary>
+        </member>
+        <member name="M:ReservationSystem.Controllers.AuthenticationController.CreateToken(ReservationSystem.Contracts.UserCredentials)">
+            <summary>
+                Request a new token
+            </summary>
+            <param name="credentials">credentials</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReservationSystem.Controllers.ReservationController.ReservationsByDevice(System.String)">
+            <summary>
+            Gets all reservations created by a specific device
+            </summary>
+            <param name="deviceId">device id</param>
+            <returns>all reservations</returns>
+        </member>
+        <member name="M:ReservationSystem.Controllers.ReservationController.RevokeSpecificReservation(System.Int32,System.String,System.Int32)">
+            <summary>
+            Revokes a specific reservation at a specific location from one device
+            </summary>
+            <param name="locationId">lcoation id</param>
+            <param name="deviceId">device id</param>
+            <param name="reservationId">reservation id</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReservationSystem.Controllers.UserController.Update(ReservationSystem.Contracts.UserModelWithId)">
+            <summary>
+              
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
