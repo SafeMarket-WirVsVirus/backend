@@ -121,7 +121,7 @@ namespace ReservationSystem.Controllers {
       }
     }
 
-    [HttpDelete("ReservationByLocation")]
+    [HttpGet("ReservationByLocation")]
     public async Task<List<ReservationContract>> ReservationByLocation(int locationId, DateTime day) {
       using (var context = new ReservationContext()) {
         var reservations = await context.Reservation.Where(x => x.Id == locationId
