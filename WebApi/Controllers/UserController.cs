@@ -54,7 +54,7 @@ namespace ReservationSystem.Controllers {
           return NotFound();
         }
 
-        if (await context.User.AnyAsync(x => x.Email == user.Email)) {
+        if (await context.User.AnyAsync(x => x.Id != user.Id && x.Email == user.Email)) {
           return BadRequest("Email already used.");
         }
 
