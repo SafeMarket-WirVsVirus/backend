@@ -23,7 +23,7 @@ namespace WebApi.Services
     public class PlacesTextsearchService
     {
         //TODO: Änder mich halt später mal :)
-        const string API_KEY = "AIzaSyCIQ-Z0CdgxoTcP37uL_jjaJN8iLsx70KE";
+        const string API_KEY = "YOUR_GOOGLE_WEB_API_KEY";
         public async Task<IEnumerable<PlacesTextsearchResponse>> GetFor(string type, double longitude, double latitude, int radiusInMeters)
         {
             string url = $"https://maps.googleapis.com/maps/api/place/textsearch/json?type={type}&radius={radiusInMeters}&location={latitude.ToString(CultureInfo.InvariantCulture)},{longitude.ToString(CultureInfo.InvariantCulture)}&key={API_KEY}";

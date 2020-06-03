@@ -23,7 +23,7 @@ namespace WebApi.Services
 
     public class PlacesDetailService
     {
-        const string API_KEY = "GOOGLE_WEB_API_KEY";
+        const string API_KEY = "YOUR_GOOGLE_WEB_API_KEY";
         public async Task<PlacesDetailResponse> GetFor(string placesId)
         {
             string referenceIdEncoded = HttpUtility.UrlEncode(placesId, Encoding.UTF8);

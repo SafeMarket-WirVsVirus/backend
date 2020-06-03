@@ -1,0 +1,25 @@
+# Update <REGISTRY> <NAMESPACE> values before use
+# Replace app name instead of safemarket if you wish to use different name for your app
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: safemarket
+ labels:
+   app: safemarket
+spec:
+ replicas: 1
+ selector:
+   matchLabels:
+     app: safemarket
+ template:
+   metadata:
+     labels:
+       app: safemarket
+   spec:
+     containers:
+     - name: safemarket
+       image: <REGISTRY>/<NAMESPACE>/myapp:v1.0.0
+       ports:
+       - containerPort: 8080
+       imagePullPolicy: Always
