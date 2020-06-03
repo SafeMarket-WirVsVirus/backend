@@ -19,10 +19,11 @@ Um das Projekt lauiffähig zu bekommen müssen 2 folgende Daten hinterlegt werde
 `~/WebApi/Services/PlacesDetailService.cs` - GooglePlaces ApiKey
 `~/WebApi/Services/PlacesTextsearchResponse.cs` - GooglePlaces ApiKey
 
-## run as docker
+## run with docker
+````bash
 docker build -t safemarketimage .
 docker run -d -p 5000:8080 --name safemarket safemarketimage
-
+````
 
 ## run with ibm cloud kubernetes 
 Follow this instruction with the existing deployment (changes needed) files in kubernetes folder:
